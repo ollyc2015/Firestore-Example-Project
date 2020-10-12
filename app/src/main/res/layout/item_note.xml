@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/note_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/note_added"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Date and Time Added"
+        android:textColor="@color/black"
+        android:fontFamily="@font/helvetica_now_display_medium"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/note_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:fontFamily="@font/helvetica_now_display_medium"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/note_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:textColor="@color/black"
+        android:fontFamily="@font/helvetica_now_display_medium"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/note_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:textColor="@color/black"
+        android:fontFamily="@font/helvetica_now_display_medium"
+        android:textSize="20sp" />
+
+</LinearLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Firestore Example Project</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="load_by_date_added">Load by date added</string>
+    <string name="add">Add</string>
+</resources>

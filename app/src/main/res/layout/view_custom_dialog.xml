@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp"
+    android:minWidth="300dp"
+    tools:context=".MainActivity">
+    <EditText
+        android:id="@+id/edit_text_title_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:textSize="22dp"
+        android:textColor="@color/black"
+        android:inputType="text" />
+    <EditText
+        android:id="@+id/edit_text_description_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22dp"
+        android:textColor="@color/black"
+        android:hint="Description"
+        android:inputType="textMultiLine" />
+    <Button
+        android:id="@+id/update_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_black_outline"
+        android:textColor="@color/black"
+        android:text="Update description" />
+    <Button
+        android:id="@+id/delete_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_black_outline"
+        android:textColor="@color/black"
+        android:text="Delete description" />
+    <Button
+        android:id="@+id/delete_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_black_outline"
+        android:textColor="@color/black"
+        android:text="Delete note" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_black_outline"
+        android:textColor="@color/black"
+        android:text="Close"
+       />
+</LinearLayout>
