@@ -9,6 +9,5 @@ interface Database {
     fun updateNoteDescription(id: CharSequence, description: String): Single<Boolean>
     fun deleteNoteDescription(id: CharSequence): Single<Boolean>
     fun deleteNote(id: CharSequence): Single<Boolean>
-    fun getOrderedNotes(): Single<List<Note>>
-    fun getUnorderedNotes(): Single<List<Note>>
+    fun getNotes(): Single<List<Note>>
 }

@@ -10,7 +10,7 @@ class NoteDatabase(firestore: FirebaseFirestore) : Database {
     private val db: FirebaseFirestore = firestore
     private val noteNode = db.collection("Notebook")
 
-    override fun getUnorderedNotes(): Single<List<Note>> {
+    override fun getNotes(): Single<List<Note>> {
 
         return Single.create { emitter ->
 
@@ -29,38 +29,6 @@ class NoteDatabase(firestore: FirebaseFirestore) : Database {
                         {
                             documentModel[i].documentId = snapshot.documents[i].id
                         }
-                        emitter.onSuccess(documentModel)
-                    } else {
-                        Log.d("test", "Current data: null")
-
-                    }
-                })
-            emitter.setCancellable { listenerRegistration.remove() }
-        }
-    }
-
-    override fun getOrderedNotes(): Single<List<Note>> {
-
-        return Single.create { emitter ->
-
-            val listenerRegistration = noteNode
-                .orderBy("dateAdded", Query.Direction.DESCENDING)
-                .addSnapshotListener(EventListener { snapshot, e ->
-                    if (e != null) {
-                        Log.w("test", "Listen failed.", e)
-                        emitter.onError(e)
-                        return@EventListener
-                    }
-
-                    if (snapshot != null) {
-                        Log.d("test", "Current data: " + snapshot.documents)
-                        val documentModel = snapshot.toObjects(Note::class.java)
-
-                        for (i in 0 until documentModel.size)
-                        {
-                            documentModel[i].documentId = snapshot.documents[i].id
-                        }
-
                         emitter.onSuccess(documentModel)
                     } else {
                         Log.d("test", "Current data: null")

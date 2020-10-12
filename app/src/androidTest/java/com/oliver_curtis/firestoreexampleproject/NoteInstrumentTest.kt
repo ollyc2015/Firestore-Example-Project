@@ -8,7 +8,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import com.oliver_curtis.firestoreexampleproject.common.util.getCurrentUKDateTime
 import com.oliver_curtis.firestoreexampleproject.data.model.Note
 import com.oliver_curtis.firestoreexampleproject.utils.performClick
 import com.oliver_curtis.firestoreexampleproject.utils.performTypeText
@@ -16,6 +15,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 
 /**
@@ -35,8 +35,7 @@ class NoteInstrumentedTest {
     @Test
     fun testAddNoteSuccess() {
 
-        val format: String = getCurrentUKDateTime()
-        Note("Note Title Test", "Note Description Test", format)
+        Note("Note Title Test", "Note Description Test", Calendar.getInstance().time)
 
         R.id.edit_text_title.performTypeText("Title Test One")
         R.id.edit_text_description.performTypeText("Description Test Two")

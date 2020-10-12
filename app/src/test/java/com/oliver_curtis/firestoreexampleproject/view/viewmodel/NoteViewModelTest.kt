@@ -1,5 +1,6 @@
 package com.oliver_curtis.firestoreexampleproject.view.viewmodel
 
+import Event
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.oliver_curtis.firestoreexampleproject.data.model.Note
 import com.oliver_curtis.firestoreexampleproject.repo.FirestoreRepository
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,6 +25,11 @@ import java.util.*
 
 class NoteViewModelTest {
 
+    companion object {
+        const val NOTE_ID_ONE = "NOTE_ID_ONE"
+        const val NOTE_DESCRIPTION_ONE = "NOTE_DESCRIPTION_ONE"
+    }
+
     @get:Rule val rule = InstantTaskExecutorRule()
 
     // mocked repository since that isn't the class under test, we can
@@ -30,12 +37,14 @@ class NoteViewModelTest {
     @Mock lateinit var repository: FirestoreRepository
     @Mock lateinit var defaultLiveDataProvider: DefaultLiveDataProvider
 
+    @Mock lateinit var updatedNoteObserver: Observer<CallResult<Event<Boolean>>>
     @Mock lateinit var unorderedNotesObserver: Observer<CallResult<List<Note>>>
+    private val updatedNoteLiveData = MutableLiveData<CallResult<Event<Boolean>>>()
     private val unorderedNotesLiveData = MutableLiveData<CallResult<List<Note>>>()
 
     // creating real Note objects not mocking them because we can.
-    private val noteOne = Note("title_one", "description_one", Calendar.getInstance().time)
-    private val noteTwo = Note("title_two", "description_two", Calendar.getInstance().time)
+    private val noteOne = Note("title_one", "description_one", Date(100))
+    private val noteTwo = Note("title_two", "description_two", Date(200))
 
     // the actual class under test
     private lateinit var viewModel: NoteViewModel
@@ -64,7 +73,7 @@ class NoteViewModelTest {
         // run assertion against observer
         argumentCaptor<CallResult<List<Note>>>().apply {
             verify(unorderedNotesObserver).onChanged(capture())
-        }.run { org.junit.Assert.assertEquals(expected, firstValue.result()) }
+        }.run { Assert.assertEquals(expected, firstValue.result()) }
     }
 
     @Test
@@ -78,7 +87,7 @@ class NoteViewModelTest {
 
         argumentCaptor<CallResult<List<Note>>>().apply {
             verify(unorderedNotesObserver).onChanged(capture())
-        }.run { org.junit.Assert.assertEquals(expectedFirst, firstValue.result()) }
+        }.run { Assert.assertEquals(expectedFirst, firstValue.result()) }
 
         val expectedSecond = listOf(noteOne, noteTwo)
 
@@ -89,7 +98,7 @@ class NoteViewModelTest {
 
         argumentCaptor<CallResult<List<Note>>>().apply {
             verify(unorderedNotesObserver, times(2)).onChanged(capture())
-        }.run { org.junit.Assert.assertEquals(expectedFirst, firstValue.result()) }
+        }.run { Assert.assertEquals(expectedFirst, firstValue.result()) }
     }
 
 
@@ -107,7 +116,7 @@ class NoteViewModelTest {
         // run assertion against observer
         argumentCaptor<CallResult<List<Note>>>().apply {
             verify(unorderedNotesObserver).onChanged(capture())
-        }.run { org.junit.Assert.assertEquals(throwable, firstValue.error()) }
+        }.run { Assert.assertEquals(throwable, firstValue.error()) }
     }
 
     @Test
@@ -122,7 +131,31 @@ class NoteViewModelTest {
 
     @Test
     fun `givenNoteDescriptionUpdated_whenOperationSuccess_thenObserveSuccessfulResponse`() {
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE)).thenReturn(Single.just(true))
 
+        viewModel.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { org.junit.Assert.assertEquals(true, firstValue.result().getContentIfNotHandled()) }
+    }
+
+    @Test
+    fun `givenNoteDescriptionUpdated_whenOperationObservedTwice_thenDoNotObserveTwice`() {
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE)).thenReturn(Single.just(true))
+
+        viewModel.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertEquals(true, firstValue.result().getContentIfNotHandled()) }
+
+        // observe second time
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertNull(firstValue.result().getContentIfNotHandled()) }
     }
 
     @Test

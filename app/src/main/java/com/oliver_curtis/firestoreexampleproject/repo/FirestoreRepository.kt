@@ -8,21 +8,22 @@ class FirestoreRepository(private val noteDatabase: NoteDatabase): Repository {
 
     override fun addNote(note: Note): Single<Boolean> {
         return noteDatabase.addNote(note)
+            .onErrorReturn { false }
     }
 
     override fun fetchNotesUnordered(): Single<List<Note>> {
-        return noteDatabase.getUnorderedNotes()
+        return noteDatabase.getNotes()
+            .onErrorReturn { emptyList() }
     }
 
     override fun fetchNotesOrdered(): Single<List<Note>> {
-        return noteDatabase.getOrderedNotes()
+        return noteDatabase.getNotes().map {
+            it.sortedByDescending { it.dateAdded?.time }
+        }.onErrorReturn { emptyList() }
     }
 
-    override fun updateNoteDescription(
-        id: CharSequence,
-        description: String
-    ): Single<Boolean> {
-        return noteDatabase.updateNoteDescription(id, description)
+    override fun updateNoteDescription(id: CharSequence, description: String): Single<Boolean> {
+        return noteDatabase.updateNoteDescription(id, description).onErrorReturn { false }
     }
 
     override fun deleteDescription(id: CharSequence): Single<Boolean> {
