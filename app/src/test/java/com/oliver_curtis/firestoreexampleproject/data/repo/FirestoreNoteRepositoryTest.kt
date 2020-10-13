@@ -1,7 +1,8 @@
-package com.oliver_curtis.firestoreexampleproject.repo
+package com.oliver_curtis.firestoreexampleproject.data.repo
 
 import com.oliver_curtis.firestoreexampleproject.data.db.NoteDatabase
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
+import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
+import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import org.junit.Before
@@ -12,7 +13,7 @@ import org.mockito.MockitoAnnotations
 import java.util.*
 
 
-class FirestoreRepositoryTest {
+class FirestoreNoteRepositoryTest {
 
     companion object {
         const val NOTE_ID_ONE = "NOTE_ID_ONE"
@@ -25,22 +26,24 @@ class FirestoreRepositoryTest {
     private val addNoteTestObserver = TestObserver<Boolean>()
     private val notesTestObserver = TestObserver<List<Note>>()
 
-    private val noteOne = Note("n1", "d1", Date(500))
-    private val noteTwo = Note("n2", "d2", Date(300))
-    private val noteThree = Note("n3", "d3", Date(200))
+    private val noteEntityOne = NoteEntity("n1", "d1", Date(500))
+    private val noteOne = Note("","n1", "d1", Date(500))
 
-    private lateinit var firestoreRepository: FirestoreRepository
+    private val noteEntityTwo = NoteEntity("n2", "d2", Date(300))
+    private val noteEntityThree = NoteEntity("n3", "d3", Date(200))
+
+    private lateinit var firestoreRepository: FirestoreNoteRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        firestoreRepository = FirestoreRepository(noteDatabase)
+        firestoreRepository = FirestoreNoteRepository(noteDatabase)
     }
 
     @Test
     fun givenNoteAdded_whenNoteAddedSuccessfully_thenReturnTrue() {
         // WHEN added successfully
-        Mockito.`when`(noteDatabase.addNote(noteOne)).thenReturn(Single.just(true))
+        Mockito.`when`(noteDatabase.addNote(noteEntityOne)).thenReturn(Single.just(true))
         // GIVEN node added
         firestoreRepository.addNote(noteOne).subscribe(addNoteTestObserver)
         // THEN true
@@ -50,7 +53,7 @@ class FirestoreRepositoryTest {
     @Test
     fun givenNoteAdded_whenNoteAddedFailed_thenReturnFalse() {
         // WHEN added unsuccessfully
-        Mockito.`when`(noteDatabase.addNote(noteOne)).thenReturn(Single.just(false))
+        Mockito.`when`(noteDatabase.addNote(noteEntityOne)).thenReturn(Single.just(false))
         // GIVEN node added
         firestoreRepository.addNote(noteOne).subscribe(addNoteTestObserver)
         // THEN false
@@ -59,24 +62,26 @@ class FirestoreRepositoryTest {
 
     @Test
     fun givenSingleUnorderedNote_whenGettingNote_thenReturnNote() {
-        val expected = listOf(noteOne)
+        val receivedNoteEntity = listOf(noteEntityOne)
+        val expected = addNoteID(receivedNoteEntity)
         // WHEN get notes
         Mockito.`when`(noteDatabase.getNotes()).thenReturn(Single.just(expected))
         // GIVEN notes requested
         firestoreRepository.fetchNotesUnordered().subscribe(notesTestObserver)
         // THEN return notes
-        notesTestObserver.assertValue(expected)
+        notesTestObserver.assertValue(expected.map { toNote(it) })
     }
 
     @Test
     fun givenMultipleUnorderedNotes_whenGettingNotes_thenReturnNotes() {
-        val expected = listOf(noteOne, noteTwo, noteThree)
+        val receivedNoteEntity = listOf(noteEntityOne, noteEntityTwo, noteEntityThree)
+        val expected = addNoteID(receivedNoteEntity)
         // WHEN get notes
         Mockito.`when`(noteDatabase.getNotes()).thenReturn(Single.just(expected))
         // GIVEN notes requested
         firestoreRepository.fetchNotesUnordered().subscribe(notesTestObserver)
         // THEN return notes
-        notesTestObserver.assertValue(expected)
+        notesTestObserver.assertValue(expected.map { toNote(it) })
     }
 
     @Test
@@ -89,25 +94,29 @@ class FirestoreRepositoryTest {
         notesTestObserver.assertValue(emptyList())
     }
 
+
     @Test
     fun givenMultipleOrderedNotes_whenGettingNotes_thenReturnNotesDescending() {
-        val expected = listOf(noteOne, noteTwo, noteThree)
+        val receivedNoteEntity = listOf(noteEntityOne, noteEntityTwo, noteEntityThree)
+        val expected = addNoteID(receivedNoteEntity)
+
         // WHEN get ordered notes
-        Mockito.`when`(noteDatabase.getNotes()).thenReturn(Single.just(listOf(noteTwo, noteOne, noteThree)))
+        Mockito.`when`(noteDatabase.getNotes()).thenReturn(Single.just(listOf(noteEntityTwo, noteEntityOne, noteEntityThree)))
         // GIVEN notes requested
         firestoreRepository.fetchNotesOrdered().subscribe(notesTestObserver)
         // THEN return ordered notes
-        notesTestObserver.assertValue(expected)
+        notesTestObserver.assertValue(expected.map { toNote(it) })
     }
+
 
     @Test
     fun givenNoteDescriptionUpdated_whenNoteDescription_updatedSuccessfully_thenReturnTrue(){
 
         //WHEN delete a note description, we expect to get back the result true
         Mockito.`when`(noteDatabase.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE)).thenReturn(Single.just(true))
-        //GIVEN delete description
+        //GIVEN delete description - when we actually pass expected values and listen for the result
         firestoreRepository.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE).subscribe(noteDescriptionDeletedTestObserver)
-        //THEN true
+        //THEN we expect the result true
         noteDescriptionDeletedTestObserver.assertValue(true)
     }
 
@@ -165,5 +174,28 @@ class FirestoreRepositoryTest {
         firestoreRepository.deleteNote(NOTE_ID_ONE).subscribe(noteDescriptionDeletedTestObserver)
         //THEN false
         noteDescriptionDeletedTestObserver.assertValue(false)
+    }
+
+    private fun addNoteID(expected: List<NoteEntity>): List<NoteEntity> {
+
+        for (i in expected.indices)
+        {
+            expected[i].documentId = i.toString()
+        }
+
+        return expected
+    }
+
+    private fun toNote(entity: NoteEntity): Note {
+        val id = entity.documentId
+        checkNotNull(id) { "Missing `documentId` from NoteEntity." }
+
+        val title = entity.title
+        checkNotNull(title) { "Missing `title` from NoteEntity." }
+
+        val dateAdded = entity.dateAdded
+        checkNotNull(dateAdded) { "Missing `dateAdded` from NoteEntity." }
+
+        return Note(id, title, entity.description ?: "", dateAdded)
     }
 }

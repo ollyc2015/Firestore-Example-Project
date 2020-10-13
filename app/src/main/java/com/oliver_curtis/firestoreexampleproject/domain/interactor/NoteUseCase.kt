@@ -1,10 +1,9 @@
-package com.oliver_curtis.firestoreexampleproject.repo
+package com.oliver_curtis.firestoreexampleproject.domain.interactor
 
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
-import io.reactivex.Observable
+import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import io.reactivex.Single
 
-interface Repository {
+interface NoteUseCase {
 
     fun addNote(note: Note): Single<Boolean>
     fun fetchNotesUnordered(): Single<List<Note>>

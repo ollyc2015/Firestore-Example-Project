@@ -2,12 +2,11 @@ package com.oliver_curtis.firestoreexampleproject.view.processor.impl
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
 import com.oliver_curtis.firestoreexampleproject.common.dialog.NoteDialogFragment.Companion.KEY_DESCRIPTION
 import com.oliver_curtis.firestoreexampleproject.common.dialog.NoteDialogFragment.Companion.KEY_ID
 import com.oliver_curtis.firestoreexampleproject.common.dialog.NoteDialogFragment.Companion.KEY_TITLE
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
-import com.oliver_curtis.firestoreexampleproject.view.NoteFragment
+import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
+import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import com.oliver_curtis.firestoreexampleproject.view.NoteView
 import com.oliver_curtis.firestoreexampleproject.view.processor.NoteViewProcessor
 import java.util.*
@@ -29,10 +28,9 @@ class NoteViewProcessorImpl : NoteViewProcessor {
         }
     }
 
-    override fun handleAddNoteClick(title: String, description: String, format: Date) {
+    override fun handleAddNoteClick(title: String, description: String, dateAdded: Date) {
         if (title.isNotEmpty() && description.isNotEmpty()) {
-            val note = Note(title, description, format)
-            view?.addNote(note)
+            view?.addNote(Note.instance(title, description, dateAdded))
 
         } else {
             view?.toast("Please add a title and a description")

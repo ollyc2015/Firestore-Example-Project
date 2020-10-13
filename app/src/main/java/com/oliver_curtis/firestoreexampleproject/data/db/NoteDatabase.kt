@@ -2,7 +2,7 @@ package com.oliver_curtis.firestoreexampleproject.data.db
 
 import android.util.Log
 import com.google.firebase.firestore.*
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
+import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import io.reactivex.Single
 
 class NoteDatabase(firestore: FirebaseFirestore) : Database {
@@ -10,7 +10,7 @@ class NoteDatabase(firestore: FirebaseFirestore) : Database {
     private val db: FirebaseFirestore = firestore
     private val noteNode = db.collection("Notebook")
 
-    override fun getNotes(): Single<List<Note>> {
+    override fun getNotes(): Single<List<NoteEntity>> {
 
         return Single.create { emitter ->
 
@@ -24,7 +24,7 @@ class NoteDatabase(firestore: FirebaseFirestore) : Database {
 
                     if (snapshot != null) {
                         Log.d("test", "Current data: " + snapshot.documents)
-                        val documentModel = snapshot.toObjects(Note::class.java)
+                        val documentModel = snapshot.toObjects(NoteEntity::class.java)
                         for (i in 0 until documentModel.size)
                         {
                             documentModel[i].documentId = snapshot.documents[i].id
@@ -40,10 +40,10 @@ class NoteDatabase(firestore: FirebaseFirestore) : Database {
     }
 
 
-    override fun addNote(note: Note): Single<Boolean> {
+    override fun addNote(noteEntity: NoteEntity): Single<Boolean> {
 
         return Single.create { emitter ->
-            noteNode.add(note)
+            noteNode.add(noteEntity)
                 .addOnCompleteListener {
                     emitter.onSuccess(it.isSuccessful)
                 }

@@ -1,10 +1,12 @@
 package com.oliver_curtis.firestoreexampleproject.view.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
+import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 
-class NoteDiff(private val oldItemList: List<Note>,
-                                    private val newItemList: List<Note>): DiffUtil.Callback() {
+class NoteDiff(
+    private val oldItemList: List<Note>,
+    private val newItemList: List<Note>
+): DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldItemList.size
@@ -15,7 +17,7 @@ class NoteDiff(private val oldItemList: List<Note>,
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldItemList[oldItemPosition].documentId == newItemList[newItemPosition].documentId
+        return oldItemList[oldItemPosition].id == newItemList[newItemPosition].id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

@@ -1,10 +1,8 @@
 package com.oliver_curtis.firestoreexampleproject.view
 
 import Event
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.oliver_curtis.firestoreexampleproject.R
 import com.oliver_curtis.firestoreexampleproject.common.dialog.NoteDialogFragment
 import com.oliver_curtis.firestoreexampleproject.common.viewmodel.CallResult
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
+import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
+import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import com.oliver_curtis.firestoreexampleproject.view.adapter.NoteAdapter
 import com.oliver_curtis.firestoreexampleproject.view.processor.NoteViewProcessor
 import com.oliver_curtis.firestoreexampleproject.view.viewmodel.NoteViewModel
@@ -398,9 +397,9 @@ class NoteFragment : Fragment(), NoteView {
         return viewModel.getNotesOrdered()
     }
 
-    private fun notesRetrieved(notes: List<Note>) {
+    private fun notesRetrieved(noteEntities: List<Note>) {
 
-        adapter.updateAll(notes)
+        adapter.updateAll(noteEntities)
     }
 
     private fun scrollToTopWhenNewItemsAdded() {

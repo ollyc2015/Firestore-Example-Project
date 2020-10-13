@@ -8,7 +8,7 @@ import java.util.*
 interface NoteViewProcessor : ViewProcessor<NoteView> {
 
     fun shouldDialogBeOpen(savedInstanceState: Bundle?)
-    fun handleAddNoteClick(title: String, description: String, format: Date)
+    fun handleAddNoteClick(title: String, description: String, dateAdded: Date)
     fun checkValuesOfNoteClicked(
         dateAdded: CharSequence?,
         noteTitle: CharSequence?,

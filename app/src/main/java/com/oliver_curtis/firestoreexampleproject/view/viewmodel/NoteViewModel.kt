@@ -1,7 +1,6 @@
 package com.oliver_curtis.firestoreexampleproject.view.viewmodel
 
 import Event
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.oliver_curtis.firestoreexampleproject.common.viewmodel.CallResult
@@ -9,13 +8,14 @@ import com.oliver_curtis.firestoreexampleproject.common.viewmodel.livedata.Defau
 import com.oliver_curtis.firestoreexampleproject.common.viewmodel.livedata.LiveDataProvider
 import com.oliver_curtis.firestoreexampleproject.common.viewmodel.rx.DefaultSchedulerProvider
 import com.oliver_curtis.firestoreexampleproject.common.viewmodel.rx.SchedulerProvider
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
-import com.oliver_curtis.firestoreexampleproject.repo.Repository
+import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
+import com.oliver_curtis.firestoreexampleproject.domain.interactor.NoteUseCase
+import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 
 class NoteViewModel(
-    private val repository: Repository,
+    private val noteUseCase: NoteUseCase,
     private val liveDataProvider: LiveDataProvider = DefaultLiveDataProvider(),
     private val schedulerProvider: SchedulerProvider = DefaultSchedulerProvider(),
 ) : ViewModel() {
@@ -24,7 +24,7 @@ class NoteViewModel(
 
         return liveDataProvider.liveDataInstance<List<Note>>().apply {
 
-            repository.fetchNotesUnordered()
+            noteUseCase.fetchNotesUnordered()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe(object : SingleObserver<List<Note>> {
@@ -46,7 +46,7 @@ class NoteViewModel(
 
         return liveDataProvider.liveDataInstance<List<Note>>().apply {
 
-            repository.fetchNotesOrdered()
+            noteUseCase.fetchNotesOrdered()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe(object : SingleObserver<List<Note>> {
@@ -72,7 +72,7 @@ class NoteViewModel(
 
         return liveDataProvider.liveDataInstance<Event<Boolean>>().apply {
 
-            repository.updateNoteDescription(id, description)
+            noteUseCase.updateNoteDescription(id, description)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe(object : SingleObserver<Boolean> {
@@ -93,7 +93,7 @@ class NoteViewModel(
     fun deleteDescription(id: CharSequence): MutableLiveData<CallResult<Event<Boolean>>> {
 
         return liveDataProvider.liveDataInstance<Event<Boolean>>().apply {
-            repository.deleteDescription(id)
+            noteUseCase.deleteDescription(id)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
@@ -116,7 +116,7 @@ class NoteViewModel(
     fun deleteNote(id: CharSequence): MutableLiveData<CallResult<Event<Boolean>>> {
 
         return liveDataProvider.liveDataInstance<Event<Boolean>>().apply {
-            repository.deleteNote(id)
+            noteUseCase.deleteNote(id)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
@@ -139,7 +139,7 @@ class NoteViewModel(
     fun addNote(note: Note): MutableLiveData<CallResult<Event<Boolean>>> {
 
         return liveDataProvider.liveDataInstance<Event<Boolean>>().apply {
-            repository.addNote(note)
+            noteUseCase.addNote(note)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())

@@ -1,10 +1,10 @@
-package com.oliver_curtis.firestoreexampleproject.data.model
+package com.oliver_curtis.firestoreexampleproject.data.entities
 
 import com.google.firebase.firestore.Exclude
 import java.util.*
 
 
-class Note {
+class NoteEntity {
     @get:Exclude
     var documentId: String? = null
     var title: String? = null

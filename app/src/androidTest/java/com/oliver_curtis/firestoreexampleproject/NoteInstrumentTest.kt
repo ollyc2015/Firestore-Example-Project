@@ -26,7 +26,7 @@ private const val NOTE_ADD_ALERT = "Please add a title and a description"
 
 @RunWith(androidx.test.ext.junit.runners.AndroidJUnit4::class)
 @LargeTest
-class NoteInstrumentedTest {
+class NoteEntityInstrumentedTest {
 
     @get:Rule
     var activityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
