@@ -27,10 +27,10 @@ class FirestoreRepository(private val noteDatabase: NoteDatabase): Repository {
     }
 
     override fun deleteDescription(id: CharSequence): Single<Boolean> {
-        return noteDatabase.deleteNoteDescription(id)
+        return noteDatabase.deleteNoteDescription(id).onErrorReturn { false }
     }
 
     override fun deleteNote(id: CharSequence): Single<Boolean> {
-        return noteDatabase.deleteNote(id)
+        return noteDatabase.deleteNote(id).onErrorReturn { false }
     }
 }

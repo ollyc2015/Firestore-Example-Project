@@ -121,11 +121,27 @@ class NoteViewModelTest {
 
     @Test
     fun `givenSingleNoteDeleted_whenObservingNotes_thenChangesObserved`() {
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.deleteNote(NOTE_ID_ONE)).thenReturn(Single.just(true))
+
+        viewModel.deleteNote(NOTE_ID_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertEquals(true, firstValue.result().getContentIfNotHandled()) }
 
     }
 
     @Test
-    fun `givenMultipleNotesDeleted_whenObservingNotes_thenChangesObserved`() {
+    fun `givenErrorWhilstObservingNoteDeleted_thenErrorObserved`() {
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.deleteNote(NOTE_ID_ONE)).thenReturn(Single.just(false))
+
+        viewModel.deleteNote(NOTE_ID_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertEquals(false, firstValue.result().getContentIfNotHandled()) }
 
     }
 
@@ -138,7 +154,7 @@ class NoteViewModelTest {
 
         argumentCaptor<CallResult<Event<Boolean>>>().apply {
             verify(updatedNoteObserver).onChanged(capture())
-        }.run { org.junit.Assert.assertEquals(true, firstValue.result().getContentIfNotHandled()) }
+        }.run { Assert.assertEquals(true, firstValue.result().getContentIfNotHandled()) }
     }
 
     @Test
@@ -160,6 +176,42 @@ class NoteViewModelTest {
 
     @Test
     fun `givenNoteDescriptionUpdated_whenOperationFailure_thenObserveFailedResponse`() {
+
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE)).thenReturn(Single.just(false))
+
+        viewModel.updateNoteDescription(NOTE_ID_ONE, NOTE_DESCRIPTION_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertEquals(false, firstValue.result().getContentIfNotHandled()) }
+    }
+
+    @Test
+    fun `givenNoteDescriptionDeleted_whenOperationSuccess_thenObserveSuccessfulResponse`(){
+
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.deleteDescription(NOTE_ID_ONE)).thenReturn(Single.just(true))
+
+        viewModel.deleteDescription(NOTE_ID_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertEquals(true, firstValue.result().getContentIfNotHandled()) }
+
+    }
+
+    @Test
+    fun `givenNoteDescriptionDeleted_whenOperationFailure_thenObserveFailureResponse`(){
+
+        Mockito.`when`(defaultLiveDataProvider.liveDataInstance<Event<Boolean>>()).thenReturn(updatedNoteLiveData)
+        Mockito.`when`(repository.deleteDescription(NOTE_ID_ONE)).thenReturn(Single.just(false))
+
+        viewModel.deleteDescription(NOTE_ID_ONE).observeForever(updatedNoteObserver)
+
+        argumentCaptor<CallResult<Event<Boolean>>>().apply {
+            verify(updatedNoteObserver).onChanged(capture())
+        }.run { Assert.assertEquals(false, firstValue.result().getContentIfNotHandled()) }
 
     }
 }
