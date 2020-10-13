@@ -8,14 +8,12 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import com.oliver_curtis.firestoreexampleproject.data.model.Note
 import com.oliver_curtis.firestoreexampleproject.utils.performClick
 import com.oliver_curtis.firestoreexampleproject.utils.performTypeText
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 
 /**
@@ -24,6 +22,7 @@ import java.util.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 private const val NOTE_ADDED_SUCCESS = "Note Added"
+private const val NOTE_ADD_ALERT = "Please add a title and a description"
 
 @RunWith(androidx.test.ext.junit.runners.AndroidJUnit4::class)
 @LargeTest
@@ -33,9 +32,7 @@ class NoteInstrumentedTest {
     var activityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun testAddNoteSuccess() {
-
-        Note("Note Title Test", "Note Description Test", Calendar.getInstance().time)
+    fun addNoteSuccess() {
 
         R.id.edit_text_title.performTypeText("Title Test One")
         R.id.edit_text_description.performTypeText("Description Test Two")
@@ -46,6 +43,21 @@ class NoteInstrumentedTest {
 
     private fun verifyNoteSuccessfullyAdded() {
         this.verifyIntentWithToast(NOTE_ADDED_SUCCESS)
+    }
+
+    @Test
+    fun notifyBothTitleAndDescriptionNeedToBeCompleted(){
+
+        R.id.edit_text_title.performTypeText("Title Test One")
+        R.id.edit_text_description.performTypeText("")
+        R.id.add_note_button.performClick()
+
+        verifyNoteAddAlert()
+
+    }
+
+    private fun verifyNoteAddAlert(){
+        this.verifyIntentWithToast(NOTE_ADD_ALERT)
     }
 
     private fun verifyIntentWithToast(value: String) {
