@@ -1,7 +1,6 @@
 package com.oliver_curtis.firestoreexampleproject.common.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,7 @@ open class NoteDialogFragment : DialogFragment() {
         interface OnDialogUpdateNoteDescription {
             fun onUpdateClicked(
                 id: CharSequence,
-                description: EditText?
+                description: EditText?,
             )
         }
         interface OnDialogDeleteNoteDescription {
@@ -44,7 +43,7 @@ open class NoteDialogFragment : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         val view =  inflater.inflate(R.layout.view_custom_dialog, container)

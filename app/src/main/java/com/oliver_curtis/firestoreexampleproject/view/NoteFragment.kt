@@ -195,10 +195,14 @@ class NoteFragment : Fragment(), NoteView {
         dialog = NoteDialogFragment.newInstance(id, title, description)
         activity?.supportFragmentManager?.let { dialog?.show(it, "dialog") }
 
-        dialogUpdateNoteDescriptionListener(dialog!!)
-        dialogDeleteNoteDescriptionListener(dialog!!)
-        dialogDeleteNoteListener(dialog!!)
-        dialogCloseListener(dialog!!)
+        dialog.let {
+            if (it != null) {
+                dialogUpdateNoteDescriptionListener(it)
+                dialogDeleteNoteDescriptionListener(it)
+                dialogDeleteNoteListener(it)
+                dialogCloseListener(it)
+            }
+        }
     }
 
     private fun dialogUpdateNoteDescriptionListener(noteDialog: NoteDialogFragment) {
