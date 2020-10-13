@@ -11,7 +11,7 @@ In order for you to use this project, you will need to follow the necessary step
 
 Firestore collection name: Notebook
 
-Main components include; navigation graph, MVVM repository pattern, LiveData, RXJava, Unit and Instrument tests.
+Main components include; Clean Architecture with MVVM repository pattern, LiveData, navigation graph, RXJava, RecyclerView, Unit and Instrument tests.
 
 
 

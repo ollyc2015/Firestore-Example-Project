@@ -1,5 +1,6 @@
 package com.oliver_curtis.firestoreexampleproject.data.repo
 
+import com.nhaarman.mockitokotlin2.any
 import com.oliver_curtis.firestoreexampleproject.data.db.NoteDatabase
 import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import com.oliver_curtis.firestoreexampleproject.domain.model.Note
@@ -43,7 +44,7 @@ class FirestoreNoteRepositoryTest {
     @Test
     fun givenNoteAdded_whenNoteAddedSuccessfully_thenReturnTrue() {
         // WHEN added successfully
-        Mockito.`when`(noteDatabase.addNote(noteEntityOne)).thenReturn(Single.just(true))
+        Mockito.`when`(noteDatabase.addNote(any())).thenReturn(Single.just(true))
         // GIVEN node added
         firestoreRepository.addNote(noteOne).subscribe(addNoteTestObserver)
         // THEN true
@@ -53,7 +54,7 @@ class FirestoreNoteRepositoryTest {
     @Test
     fun givenNoteAdded_whenNoteAddedFailed_thenReturnFalse() {
         // WHEN added unsuccessfully
-        Mockito.`when`(noteDatabase.addNote(noteEntityOne)).thenReturn(Single.just(false))
+        Mockito.`when`(noteDatabase.addNote(any())).thenReturn(Single.just(false))
         // GIVEN node added
         firestoreRepository.addNote(noteOne).subscribe(addNoteTestObserver)
         // THEN false
