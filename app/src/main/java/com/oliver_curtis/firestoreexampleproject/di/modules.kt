@@ -16,7 +16,7 @@ import org.koin.dsl.module
 val appModules = module{
 
     single { FirebaseFirestore.getInstance() }
-    single {NoteDatabase(get()) }
+    single <Database>{NoteDatabase(get()) }
     factory<NoteRepository>{ FirestoreNoteRepository(get()) }
     single<NoteUseCase> { NoteUseCaseImpl(get())  }
     viewModel { NoteViewModel(get()) }

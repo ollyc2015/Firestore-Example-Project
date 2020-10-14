@@ -1,12 +1,12 @@
 package com.oliver_curtis.firestoreexampleproject.data.repo
 
-import com.oliver_curtis.firestoreexampleproject.data.db.NoteDatabase
+import com.oliver_curtis.firestoreexampleproject.data.db.Database
 import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import com.oliver_curtis.firestoreexampleproject.domain.repo.NoteRepository
 import io.reactivex.Single
 
-class FirestoreNoteRepository(private val noteDatabase: NoteDatabase) : NoteRepository {
+class FirestoreNoteRepository(private val noteDatabase: Database) : NoteRepository {
 
     override fun addNote(note: Note): Single<Boolean> {
         return noteDatabase.addNote(NoteEntity(note.title, note.description, note.dateAdded)).onErrorReturn { false }
