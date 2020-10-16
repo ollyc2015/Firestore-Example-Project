@@ -12,7 +12,7 @@ A user can click on a note to reveal an alert dialog with further options, such 
 
 ### Setup
 
-In order for you to use this project, you will need to follow the necessary steps to setup Firebase. The project itself is already configured for you. I found [this](https://www.youtube.com/watch?v=dRYnm_k3w1w) video useful when setting up Firebase. You will need to do this in order to generate your `google-services.json` file. Once you have done this and added it to the root of the `app` module of the project, you will just need to create the Cloud Firestore database, which is only a couple of clicks! Once this is done, you should be good to go! 
+In order for you to use this project, you will need to follow the necessary steps to setup Firebase. The project itself is already configured for you. I found [this](https://www.youtube.com/watch?v=dRYnm_k3w1w) video useful when setting up Firebase. You will need to do this in order to generate your `google-services.json` file. Once you have done this and added it to the root of the `app` module of the project, you will just need to create the Cloud Firestore database, which is only a couple of clicks and done inside of Firebase. Once this is done, you should be good to go! 
 
 Firestore collection name: `Notebook`
 
