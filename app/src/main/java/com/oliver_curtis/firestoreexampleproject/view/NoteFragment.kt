@@ -15,9 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.oliver_curtis.firestoreexampleproject.R
-import com.oliver_curtis.firestoreexampleproject.common.dialog.NoteDialogFragment
+import com.oliver_curtis.firestoreexampleproject.view.dialog.NoteDialogFragment
 import com.oliver_curtis.firestoreexampleproject.common.viewmodel.CallResult
-import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import com.oliver_curtis.firestoreexampleproject.view.adapter.NoteAdapter
 import com.oliver_curtis.firestoreexampleproject.view.processor.NoteViewProcessor

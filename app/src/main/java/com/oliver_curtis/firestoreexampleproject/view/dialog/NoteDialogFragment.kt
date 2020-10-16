@@ -1,4 +1,4 @@
-package com.oliver_curtis.firestoreexampleproject.common.dialog
+package com.oliver_curtis.firestoreexampleproject.view.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
