@@ -45,6 +45,7 @@ open class NoteDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        retainInstance = true
 
         val view =  inflater.inflate(R.layout.view_custom_dialog, container)
 

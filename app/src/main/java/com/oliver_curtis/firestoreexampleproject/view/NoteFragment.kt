@@ -50,7 +50,7 @@ class NoteFragment : Fragment(), NoteView {
     }
 
     private fun init(savedInstanceState: Bundle?) {
-
+        retainInstance = true
         processor.attachView(this)
         editTextTitle = activity?.findViewById(R.id.edit_text_title)
         editTextDescription = activity?.findViewById(R.id.edit_text_description)
@@ -342,7 +342,6 @@ class NoteFragment : Fragment(), NoteView {
         val orientation = resources.configuration.orientation
         processor.handleScreenOrientation(orientation)
     }
-
 
     override fun toast(string: String) {
 
