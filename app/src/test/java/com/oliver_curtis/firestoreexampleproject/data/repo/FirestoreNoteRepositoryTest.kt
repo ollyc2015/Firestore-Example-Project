@@ -1,7 +1,7 @@
 package com.oliver_curtis.firestoreexampleproject.data.repo
 
 import com.nhaarman.mockitokotlin2.any
-import com.oliver_curtis.firestoreexampleproject.data.db.NoteDatabase
+import com.oliver_curtis.firestoreexampleproject.data.source.RemoteNoteDataSource
 import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import io.reactivex.Single
@@ -21,7 +21,7 @@ class FirestoreNoteRepositoryTest {
         const val NOTE_DESCRIPTION_ONE = "NOTE_DESCRIPTION_ONE"
     }
 
-    @Mock lateinit var noteDatabase: NoteDatabase
+    @Mock lateinit var noteDatabase: RemoteNoteDataSource
 
     private val noteDescriptionDeletedTestObserver = TestObserver<Boolean>()
     private val addNoteTestObserver = TestObserver<Boolean>()

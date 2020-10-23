@@ -1,11 +1,11 @@
-package com.oliver_curtis.firestoreexampleproject.data.db
+package com.oliver_curtis.firestoreexampleproject.data.source
 
 import android.util.Log
 import com.google.firebase.firestore.*
 import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import io.reactivex.Single
 
-class NoteDatabase(firestore: FirebaseFirestore) : Database {
+class RemoteNoteDataSource(firestore: FirebaseFirestore) : NoteDataSource {
 
     private val db: FirebaseFirestore = firestore
     private val noteNode = db.collection("Notebook")

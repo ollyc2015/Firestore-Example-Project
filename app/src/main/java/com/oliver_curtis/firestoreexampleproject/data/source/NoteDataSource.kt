@@ -1,9 +1,9 @@
-package com.oliver_curtis.firestoreexampleproject.data.db
+package com.oliver_curtis.firestoreexampleproject.data.source
 
 import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import io.reactivex.Single
 
-interface Database {
+interface NoteDataSource {
 
     fun addNote(noteEntity: NoteEntity): Single<Boolean>
     fun updateNoteDescription(id: CharSequence, description: String): Single<Boolean>

@@ -1,8 +1,8 @@
 package com.oliver_curtis.firestoreexampleproject.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.oliver_curtis.firestoreexampleproject.data.db.Database
-import com.oliver_curtis.firestoreexampleproject.data.db.NoteDatabase
+import com.oliver_curtis.firestoreexampleproject.data.source.NoteDataSource
+import com.oliver_curtis.firestoreexampleproject.data.source.RemoteNoteDataSource
 import com.oliver_curtis.firestoreexampleproject.data.repo.FirestoreNoteRepository
 import com.oliver_curtis.firestoreexampleproject.domain.interactor.NoteUseCase
 import com.oliver_curtis.firestoreexampleproject.domain.interactor.NoteUseCaseImpl
@@ -16,7 +16,7 @@ import org.koin.dsl.module
 val appModules = module{
 
     single { FirebaseFirestore.getInstance() }
-    single <Database>{NoteDatabase(get()) }
+    single <NoteDataSource>{RemoteNoteDataSource(get()) }
     factory<NoteRepository>{ FirestoreNoteRepository(get()) }
     single<NoteUseCase> { NoteUseCaseImpl(get())  }
     viewModel { NoteViewModel(get()) }

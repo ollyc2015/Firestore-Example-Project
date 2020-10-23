@@ -1,36 +1,36 @@
 package com.oliver_curtis.firestoreexampleproject.data.repo
 
-import com.oliver_curtis.firestoreexampleproject.data.db.Database
+import com.oliver_curtis.firestoreexampleproject.data.source.NoteDataSource
 import com.oliver_curtis.firestoreexampleproject.data.entities.NoteEntity
 import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 import com.oliver_curtis.firestoreexampleproject.domain.repo.NoteRepository
 import io.reactivex.Single
 
-class FirestoreNoteRepository(private val noteDatabase: Database) : NoteRepository {
+class FirestoreNoteRepository(private val noteNoteDataSource: NoteDataSource) : NoteRepository {
 
     override fun addNote(note: Note): Single<Boolean> {
-        return noteDatabase.addNote(NoteEntity(note.title, note.description, note.dateAdded)).onErrorReturn { false }
+        return noteNoteDataSource.addNote(NoteEntity(note.title, note.description, note.dateAdded)).onErrorReturn { false }
     }
 
     override fun fetchNotesUnordered(): Single<List<Note>> {
-        return noteDatabase.getNotes().map { it.map { toNote(it) } }.onErrorReturn { emptyList() }
+        return noteNoteDataSource.getNotes().map { it.map { toNote(it) } }.onErrorReturn { emptyList() }
     }
 
     override fun fetchNotesOrdered(): Single<List<Note>> {
-        return noteDatabase.getNotes().map { it.map { toNote(it) } }
+        return noteNoteDataSource.getNotes().map { it.map { toNote(it) } }
             .map { it.sortedByDescending { it.dateAdded.time } }.onErrorReturn { emptyList() }
     }
 
     override fun updateNoteDescription(id: CharSequence, description: String): Single<Boolean> {
-        return noteDatabase.updateNoteDescription(id, description).onErrorReturn { false }
+        return noteNoteDataSource.updateNoteDescription(id, description).onErrorReturn { false }
     }
 
     override fun deleteDescription(id: CharSequence): Single<Boolean> {
-        return noteDatabase.deleteNoteDescription(id).onErrorReturn { false }
+        return noteNoteDataSource.deleteNoteDescription(id).onErrorReturn { false }
     }
 
     override fun deleteNote(id: CharSequence): Single<Boolean> {
-        return noteDatabase.deleteNote(id).onErrorReturn { false }
+        return noteNoteDataSource.deleteNote(id).onErrorReturn { false }
     }
 
     private fun toNote(entity: NoteEntity): Note {

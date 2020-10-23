@@ -5,7 +5,7 @@ import com.oliver_curtis.firestoreexampleproject.domain.model.Note
 interface NoteView {
 
     fun showNoteDialog(id: CharSequence, title: CharSequence, description: CharSequence)
-    fun addNote(noteEntity: Note)
+    fun addNote(note: Note)
     fun toast(string: String)
     fun handleLandscapeView()
     fun handlePortraitView()
